@@ -1,3 +1,4 @@
+--Analyzing Unicorn Companies
 WITH top_industries AS
 (
     SELECT i.industry, 
@@ -35,3 +36,23 @@ WHERE year in ('2019', '2020', '2021')
                     FROM top_industries)
 GROUP BY industry, num_unicorns, year
 ORDER BY year DESC, num_unicorns DESC;
+
+--Analyzing motorcycle part sales
+SELECT product_line,CASE WHEN EXTRACT(month FROM date)=6
+THEN 'June'
+WHEN EXTRACT(month FROM date)=7 THEN 'July'
+WHEN EXTRACT(month FROM date)=8 THEN 'August'
+END AS month,warehouse,
+SUM(total)-SUM(payment_fee) AS net_revenue
+FROM sales
+WHERE client_type='Wholesale'
+GROUP BY product_line,month,warehouse
+ORDER BY product_line,month,net_revenue
+
+--Analyzing student's mental health
+select stay,count(*) as count_int,ROUND(AVG(todep),2) as average_phq,ROUND(AVG(tosc),2) as average_scs,ROUND(AVG(toas),2) AS average_as
+from public.students
+WHERE stay is not null
+AND inter_dom='Inter'
+group by stay
+order by stay DESC;
